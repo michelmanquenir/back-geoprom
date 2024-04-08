@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
 @Entity
@@ -27,10 +25,10 @@ public class Products {
     private String sku;
 
     @Column(name = "purchase_price")
-    private Integer purchasePrice;
+    private Integer purchase_price;
 
     @Column(name = "purchase_sell")
-    private Integer purchaseSell;
+    private Integer purchase_sell;
 
     @Column(name = "stock")
     private Integer stock;

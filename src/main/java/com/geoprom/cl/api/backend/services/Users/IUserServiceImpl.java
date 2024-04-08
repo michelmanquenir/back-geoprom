@@ -1,7 +1,7 @@
 package com.geoprom.cl.api.backend.services.Users;
 
 
-import com.geoprom.cl.api.backend.Repository.UserRepository;
+import com.geoprom.cl.api.backend.Repository.UsersRepository;
 import com.geoprom.cl.api.backend.models.Request.LoginRequest;
 import com.geoprom.cl.api.backend.models.Users;
 import com.geoprom.cl.api.backend.utils.Utils;
@@ -23,9 +23,9 @@ import java.util.Map;
 public class IUserServiceImpl {
     private final Logger logger = LoggerFactory.getLogger(IUserServiceImpl.class.getSimpleName());
 
-    public static UserRepository userRepository;
+    public static UsersRepository userRepository;
 
-    public IUserServiceImpl(UserRepository userRepository) {
+    public IUserServiceImpl(UsersRepository userRepository) {
         IUserServiceImpl.userRepository = userRepository;
     }
 

@@ -1,7 +1,7 @@
 package com.geoprom.cl.api.backend.helper;
 
 import com.geoprom.cl.api.backend.models.Products;
-import com.geoprom.cl.api.backend.services.Products.ProductService;
+import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 public class ProductHelper {
     private static final Logger logger = LoggerFactory.getLogger(ProductHelper.class.getSimpleName());
 
-    private static ProductService productService;
+    private static ProductsService productsService;
 
-    public ProductHelper(ProductService productService) {
-        ProductHelper.productService = productService;
+    public ProductHelper(ProductsService productsService) {
+        ProductHelper.productsService = productsService;
     }
     public static Products updateProduct(Products product, Products currentProduct) {
         logger.info("Start updateProduct");
@@ -35,11 +35,11 @@ public class ProductHelper {
         if (product.getSku() != null) {
             newProducts.setSku(product.getSku());
         }
-        if (product.getPurchasePrice() != null) {
-            newProducts.setPurchasePrice(product.getPurchasePrice());
+        if (product.getPurchase_price() != null) {
+            newProducts.setPurchase_price(product.getPurchase_price());
         }
-        if (product.getPurchaseSell() != null) {
-            newProducts.setPurchaseSell(product.getPurchaseSell());
+        if (product.getPurchase_sell() != null) {
+            newProducts.setPurchase_sell(product.getPurchase_sell());
         }
         if (product.getStock() != null) {
             newProducts.setStock(product.getStock());
@@ -50,6 +50,6 @@ public class ProductHelper {
         if (product.getStatus() != null) {
             newProducts.setStatus(product.getStatus());
         }
-        return productService.save(newProducts);
+        return productsService.save(newProducts);
     }
 }

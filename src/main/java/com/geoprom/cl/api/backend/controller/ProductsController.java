@@ -2,8 +2,8 @@ package com.geoprom.cl.api.backend.controller;
 
 import com.geoprom.cl.api.backend.helper.ProductHelper;
 import com.geoprom.cl.api.backend.models.Products;
-import com.geoprom.cl.api.backend.services.Products.IProductServiceImpl;
-import com.geoprom.cl.api.backend.services.Products.ProductService;
+import com.geoprom.cl.api.backend.services.Products.IProductsServiceImpl;
+import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,43 +16,55 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
-public class ProductController {
+public class ProductsController {
+    private final Logger logger = LoggerFactory.getLogger(ProductsController.class.getSimpleName());
 
-    private final Logger logger = LoggerFactory.getLogger(ProductController.class.getSimpleName());
+    private final ProductsService productsService;
 
-    private final ProductService productService;
-
-    public ProductController(IProductServiceImpl productService) {
-        this.productService = productService;
+    public ProductsController(ProductsService productService) {
+        this.productsService = productService;
     }
 
     @GetMapping
     public ResponseEntity<?> getProducts(@RequestParam(required = false) Long product_id) {
         logger.info("consultando productos: " + product_id);
         Map<String, Object> response = new HashMap<>();
-        List<Products> products = productService.getProducts(product_id);
-        logger.info("products" + products.size());
-        response.put("productos", products);
-        response.put("error", 0);
-        response.put("message", "Productos obtenidos con exito");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            List<Products> products = productsService.getProducts(product_id);
+            logger.info("products" + products.size());
+            response.put("products", products);
+            response.put("error", 0);
+            response.put("code", HttpStatus.OK.value());
+            response.put("message", "Productos obtenidos con exito");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            response.put("message", "error when searching users");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
     public ResponseEntity<Products> createProduct(@RequestBody Products product) {
-        Products newProduct = productService.createProduct(product);
+        Products newProduct = productsService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @DeleteMapping("/{productId}/soft-delete")
-    public ResponseEntity<Void> softDeleteUser(@PathVariable Long productId) {
-        productService.softDeleteProduct(productId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> softDeleteUser(@PathVariable Long productId) {
+        Map<String, Object> response = new HashMap<>();
+
+        productsService.softDeleteProduct(productId);
+        response.put("message", "Cpf has been successfully eliminated");
+        response.put("code", HttpStatus.OK.value());
+        response.put("error", 0);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/activate/{productId}")
     public ResponseEntity<Void> activateProduct(@PathVariable Long productId) {
-        productService.activateProduct(productId);
+        productsService.activateProduct(productId);
         return ResponseEntity.ok().build();
     }
 
@@ -65,7 +77,7 @@ public class ProductController {
         Map<String, Object> response = new HashMap<>();
         try {
             Products products;
-            Products currentProduct = productService.findById(product_id);
+            Products currentProduct = productsService.findById(product_id);
 
             if (currentProduct == null) {
                 logger.info("Product does not exist in the database");
@@ -79,6 +91,7 @@ public class ProductController {
             logger.info("successfully updated");
             response.put("data", products);
             response.put("code", HttpStatus.OK.value());
+            response.put("error", 0);
             response.put("message", "Product successfully updated");
 
             return new ResponseEntity<>(response, HttpStatus.OK);

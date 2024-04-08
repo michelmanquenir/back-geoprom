@@ -4,7 +4,7 @@ import com.geoprom.cl.api.backend.models.Products;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductsService {
 
     List<Products> getProducts(Long product_id);
 

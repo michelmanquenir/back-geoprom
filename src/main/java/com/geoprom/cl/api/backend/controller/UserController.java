@@ -32,7 +32,7 @@ public class UserController {
         List<Users> users = usersService.getUsers(user_id);
 
         logger.info("users" + users.size());
-        response.put("usuarios", users);
+        response.put("users", users);
         response.put("error", 0);
         response.put("message", "Usuarios obtenidos con exito");
         return new ResponseEntity<>(response, HttpStatus.OK);

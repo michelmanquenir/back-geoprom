@@ -24,7 +24,7 @@ public class Users {
     private String name;
 
     @Column(name = "last_name", length = 45, nullable = false)
-    private String lastName;
+    private String last_name;
 
     @Column(name = "rut", length = 10, nullable = false, unique = true)
     private String rut;
@@ -36,7 +36,7 @@ public class Users {
     private String address;
 
     @Column(name = "fecha_nac", nullable = false)
-    private Date fechaNac;
+    private Date fecha_nac;
 
     @Column(name = "status", nullable = false)
     @ColumnDefault("1")
