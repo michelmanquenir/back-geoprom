@@ -1,8 +1,7 @@
 package com.geoprom.cl.api.backend.controller;
 
-
 import com.geoprom.cl.api.backend.models.Request.LoginRequest;
-import com.geoprom.cl.api.backend.models.Users;
+import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.services.Users.IUserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> getUsers(@RequestParam(required = false) Long user_id) {
         Map<String, Object> response = new HashMap<>();
 
-        List<Users> users = usersService.getUsers(user_id);
+        List<Usuarios> users = usersService.getUsers(user_id);
 
         logger.info("users" + users.size());
         response.put("users", users);
@@ -39,16 +38,20 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        Users newUser = usersService.createUser(user);
+    public ResponseEntity<Usuarios> createUser(@RequestBody Usuarios user) {
+        Usuarios newUser = usersService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
 
-    @PutMapping("/{userId}/soft-delete")
-    public ResponseEntity<Void> softDeleteUser(@PathVariable Long userId) {
+    @DeleteMapping("/{userId}/soft-delete")
+    public ResponseEntity<?> softDeleteUser(@PathVariable Long userId) {
+        Map<String, Object> response = new HashMap<>();
         usersService.softDeleteUser(userId);
-        return ResponseEntity.ok().build();
+        response.put("message", "Cpf has been successfully eliminated");
+        response.put("code", HttpStatus.OK.value());
+        response.put("error", 0);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/activate/{userId}")
@@ -82,3 +85,5 @@ public class UserController {
         }
     }
 }
+
+

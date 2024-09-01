@@ -1,8 +1,8 @@
 package com.geoprom.cl.api.backend.services.Sales;
 
+import com.geoprom.cl.api.backend.Repository.SalesDetailRepository;
 import com.geoprom.cl.api.backend.Repository.SalesRepository;
-import com.geoprom.cl.api.backend.models.Request.Sale.CreateSaleRequest;
-import com.geoprom.cl.api.backend.models.Sales;
+import com.geoprom.cl.api.backend.models.Ventas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,19 @@ public class ISalesServiceImpl implements SalesService {
 
     private final SalesRepository salesRepository;
 
+   private final SalesDetailRepository salesDetailRepository;
 
-    public ISalesServiceImpl(SalesRepository salesRepository) {
+    public ISalesServiceImpl(SalesRepository salesRepository,
+                             SalesDetailRepository salesDetailRepository) {
         this.salesRepository = salesRepository;
+        this.salesDetailRepository = salesDetailRepository;
     }
 
     @Override
-    public List<Sales> getSales(Long sale_id) {
+    public List<Ventas> getSales(Long sale_id) {
         logger.info("sale_id:" + sale_id);
         if (sale_id != null) {
-            Sales sales = salesRepository.findById(sale_id).orElse(null);
+            Ventas sales = salesRepository.findById(sale_id).orElse(null);
             if (sales != null) {
                 return Collections.singletonList(sales);
             } else {
@@ -37,14 +40,8 @@ public class ISalesServiceImpl implements SalesService {
     }
 
     @Override
-    public Sales createSale(Sales sales) {
+    public Ventas createSale(Ventas sale) {
 
-        logger.info(sales.toString());
-
-
-
-
-       // return salesRepository.save(sales);
         return null;
     }
 }

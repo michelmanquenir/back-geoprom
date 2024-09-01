@@ -1,8 +1,8 @@
 package com.geoprom.cl.api.backend.controller;
 
 import com.geoprom.cl.api.backend.helper.ProductHelper;
-import com.geoprom.cl.api.backend.models.Products;
-import com.geoprom.cl.api.backend.services.Products.IProductsServiceImpl;
+import com.geoprom.cl.api.backend.models.Productos;
+import com.geoprom.cl.api.backend.models.Response.Productos.ResponseDTO;
 import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class ProductsController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Products> products = productsService.getProducts(product_id);
+            List<Productos> products = productsService.getProducts(product_id);
             logger.info("products" + products.size());
             response.put("products", products);
             response.put("error", 0);
@@ -44,18 +44,28 @@ public class ProductsController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Products> createProduct(@RequestBody Products product) {
-        Products newProduct = productsService.createProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+    @PostMapping("/crearProducto")
+    public ResponseEntity<ResponseDTO> createProduct(@RequestBody Productos product) {
+        ResponseDTO response = new ResponseDTO();
+        try {
+            Productos newProduct = productsService.createProduct(product);
+            response.setError(0); // Sin errores
+            response.setMessage("Producto creado con éxito");
+            response.setProduct(newProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            response.setError(1); // Error genérico
+            response.setMessage("Ocurrió un error durante la creación del producto: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @DeleteMapping("/{productId}/soft-delete")
-    public ResponseEntity<?> softDeleteUser(@PathVariable Long productId) {
+    public ResponseEntity<?> softDeleteProduct(@PathVariable Long productId) {
         Map<String, Object> response = new HashMap<>();
 
         productsService.softDeleteProduct(productId);
-        response.put("message", "Cpf has been successfully eliminated");
+        response.put("message", "Producto eliminado con exito");
         response.put("code", HttpStatus.OK.value());
         response.put("error", 0);
 
@@ -71,13 +81,13 @@ public class ProductsController {
     @PutMapping("/update-product/{product_id}")
     public ResponseEntity<?> updateProduct(
             @PathVariable Long product_id,
-            @RequestBody Products product) {
+            @RequestBody Productos product) {
         logger.info("update producto" + product);
         logger.info("product id: " + product_id);
         Map<String, Object> response = new HashMap<>();
         try {
-            Products products;
-            Products currentProduct = productsService.findById(product_id);
+            Productos products;
+            Productos currentProduct = productsService.findById(product_id);
 
             if (currentProduct == null) {
                 logger.info("Product does not exist in the database");

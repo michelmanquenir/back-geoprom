@@ -1,6 +1,6 @@
 package com.geoprom.cl.api.backend.helper;
 
-import com.geoprom.cl.api.backend.models.Products;
+import com.geoprom.cl.api.backend.models.Productos;
 import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,30 +16,30 @@ public class ProductHelper {
     public ProductHelper(ProductsService productsService) {
         ProductHelper.productsService = productsService;
     }
-    public static Products updateProduct(Products product, Products currentProduct) {
+    public static Productos updateProduct(Productos product, Productos currentProduct) {
         logger.info("Start updateProduct");
 
-        Products newProducts = new Products();
+        Productos newProducts = new Productos();
         BeanUtils.copyProperties(currentProduct, newProducts);
 
         // Actualizar solo los campos no nulos de product
-        if (product.getId() != null) {
-            newProducts.setId(product.getId());
+        if (product.getId_producto() != null) {
+            newProducts.setId_producto(product.getId_producto());
         }
-        if (product.getName() != null) {
-            newProducts.setName(product.getName());
+        if (product.getNombre() != null) {
+            newProducts.setNombre(product.getNombre());
         }
-        if (product.getRutCompany() != null) {
-            newProducts.setRutCompany(product.getRutCompany());
+        if (product.getRut_empresa() != null) {
+            newProducts.setRut_empresa(product.getRut_empresa());
         }
         if (product.getSku() != null) {
             newProducts.setSku(product.getSku());
         }
-        if (product.getPurchase_price() != null) {
-            newProducts.setPurchase_price(product.getPurchase_price());
+        if (product.getPrecio_compra() != null) {
+            newProducts.setPrecio_compra(product.getPrecio_compra());
         }
-        if (product.getPurchase_sell() != null) {
-            newProducts.setPurchase_sell(product.getPurchase_sell());
+        if (product.getPrecio_venta() != null) {
+            newProducts.setPrecio_venta(product.getPrecio_venta());
         }
         if (product.getStock() != null) {
             newProducts.setStock(product.getStock());
@@ -47,8 +47,8 @@ public class ProductHelper {
         if (product.getUrlImg() != null) {
             newProducts.setUrlImg(product.getUrlImg());
         }
-        if (product.getStatus() != null) {
-            newProducts.setStatus(product.getStatus());
+        if (product.getEstado() != null) {
+            newProducts.setEstado(product.getEstado());
         }
         return productsService.save(newProducts);
     }

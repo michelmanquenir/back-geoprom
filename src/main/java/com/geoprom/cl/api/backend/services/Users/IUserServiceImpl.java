@@ -3,7 +3,7 @@ package com.geoprom.cl.api.backend.services.Users;
 
 import com.geoprom.cl.api.backend.Repository.UsersRepository;
 import com.geoprom.cl.api.backend.models.Request.LoginRequest;
-import com.geoprom.cl.api.backend.models.Users;
+import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ public class IUserServiceImpl {
         IUserServiceImpl.userRepository = userRepository;
     }
 
-    public List<Users> getUsers(Long userId) {
+    public List<Usuarios> getUsers(Long userId) {
         if (userId != null) {
-            Users user = userRepository.findById(userId).orElse(null);
+            Usuarios user = userRepository.findById(userId).orElse(null);
             if (user != null) {
                 return Collections.singletonList(user);
             } else {
@@ -43,7 +43,7 @@ public class IUserServiceImpl {
     }
 
     @Transactional
-    public Users createUser(Users user) {
+    public Usuarios createUser(Usuarios user) {
         return userRepository.save(user);
     }
 
@@ -63,26 +63,26 @@ public class IUserServiceImpl {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
-        Users user =  userRepository.findUserByEmail(email);
+        Usuarios user =  userRepository.findUserByEmail(email);
 
         if(user == null){
             logger.info("User not found for this email");
             response.put("message", "User not found for this email");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } else {
-            if(user.getStatus() == 0){
+            if(user.getEstado() == 0){
                 logger.info("User inactive");
                 response.put("message", "User inactive");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
             String passwordEncrypt = encryptPassword(password);
-            if(!passwordEncrypt.equals(user.getPassword())){
+            if(!passwordEncrypt.equals(user.getContrasena())){
                 logger.info("Incorrect password");
                 response.put("message", "Incorrect password");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            String usuario = user.getName();
+            String usuario = user.getNombre();
             logger.info("User correct");
             String token = Utils.createToken(usuario);
 

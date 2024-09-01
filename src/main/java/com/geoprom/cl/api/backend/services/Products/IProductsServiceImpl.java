@@ -1,6 +1,6 @@
 package com.geoprom.cl.api.backend.services.Products;
 import com.geoprom.cl.api.backend.Repository.ProductsRepository;
-import com.geoprom.cl.api.backend.models.Products;
+import com.geoprom.cl.api.backend.models.Productos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,10 @@ public class IProductsServiceImpl implements ProductsService {
         this.productsRepository = productRepository;
     }
 
-    public List<Products> getProducts(Long product_id) {
+    public List<Productos> getProducts(Long product_id) {
         logger.info("product_id:" + product_id);
         if (product_id != null) {
-            Products products = productsRepository.findById(product_id).orElse(null);
+            Productos products = productsRepository.findById(product_id).orElse(null);
             if (products != null) {
                 return Collections.singletonList(products);
             } else {
@@ -34,7 +34,7 @@ public class IProductsServiceImpl implements ProductsService {
     }
 
     @Transactional
-    public Products createProduct(Products product) {
+    public Productos createProduct(Productos product) {
         return productsRepository.save(product);
     }
 
@@ -49,13 +49,13 @@ public class IProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public Products save(Products product) {
+    public Productos save(Productos product) {
         return productsRepository.save(product);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Products findById(Long product_id) {
+    public Productos findById(Long product_id) {
         return productsRepository.findById(product_id).orElse(null);
     }
 }

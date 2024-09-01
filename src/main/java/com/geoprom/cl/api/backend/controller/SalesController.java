@@ -1,7 +1,6 @@
 package com.geoprom.cl.api.backend.controller;
 
-import com.geoprom.cl.api.backend.models.Request.Sale.CreateSaleRequest;
-import com.geoprom.cl.api.backend.models.Sales;
+import com.geoprom.cl.api.backend.models.Ventas;
 import com.geoprom.cl.api.backend.services.Sales.SalesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class SalesController {
             @RequestParam(required = false) Long sale_id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Sales> sales = salesService.getSales(sale_id);
+            List<Ventas> sales = salesService.getSales(sale_id);
             if (sales == null){
                 logger.info("Sales does not exist in the database");
                 response.put("message", "Error: could not edit the sale with Id: "
@@ -47,8 +46,8 @@ public class SalesController {
     }
 
     @PostMapping("/sell")
-    public ResponseEntity<Sales> createSale(@RequestBody Sales sale) {
-        Sales newSale = salesService.createSale(sale);
+    public ResponseEntity<Ventas> createSale(@RequestBody Ventas sale) {
+        Ventas newSale = salesService.createSale(sale);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSale);
     }
 }
