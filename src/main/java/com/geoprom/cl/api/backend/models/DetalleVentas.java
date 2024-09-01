@@ -33,7 +33,7 @@ public class DetalleVentas {
     private BigDecimal precio_unitario;
 
     @Column(name = "subtotal", nullable = false)
-    private BigDecimal preciosubtotal_unitario;
+    private BigDecimal subtotal;
 
     @Column(name = "updated_at")
     private Timestamp updated_at;
