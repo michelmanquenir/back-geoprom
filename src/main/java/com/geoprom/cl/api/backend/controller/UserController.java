@@ -37,7 +37,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("crear-usuario")
     public ResponseEntity<Usuarios> createUser(@RequestBody Usuarios user) {
         Usuarios newUser = usersService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
@@ -72,18 +72,7 @@ public class UserController {
             return null;
         }
     }
-    @PostMapping("/register")
-    public ResponseEntity<?>registerUser(@RequestBody LoginRequest loginRequest) {
-        logger.info("email: " + loginRequest.getEmail());
-        logger.info("password: " + loginRequest.getPassword());
 
-        try {
-            return usersService.findUserByEmail(loginRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
 
 

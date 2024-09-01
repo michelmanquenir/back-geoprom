@@ -23,8 +23,8 @@ public class ProductHelper {
         BeanUtils.copyProperties(currentProduct, newProducts);
 
         // Actualizar solo los campos no nulos de product
-        if (product.getId_producto() != null) {
-            newProducts.setId_producto(product.getId_producto());
+        if (product.getId() != null) {
+            newProducts.setId(product.getId());
         }
         if (product.getNombre() != null) {
             newProducts.setNombre(product.getNombre());

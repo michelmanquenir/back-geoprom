@@ -16,8 +16,8 @@ public class Ventas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_venta")
-    private Long id_venta;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "total_ganancia")
     private BigDecimal total_ganancia;

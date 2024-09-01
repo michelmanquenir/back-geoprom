@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param;
 public interface UsersRepository extends JpaRepository<Usuarios, Long> {
 
     @Modifying
-    @Query("UPDATE Usuarios u SET u.estado = 0 WHERE u.id_usuario = :id")
+    @Query("UPDATE Usuarios u SET u.estado = 0 WHERE u.id = :id")
     void softDelete(@Param("id") Long id);
 
     @Modifying
-    @Query("UPDATE Usuarios u SET u.estado = 1 WHERE u.id_usuario = :userId")
+    @Query("UPDATE Usuarios u SET u.estado = 1 WHERE u.id = :userId")
     void activateUser(@Param("userId") Long userId);
 
     //@Query("SELECT u FROM Users u WHERE u.email = :email")
