@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/sales")
+@RequestMapping("/api/ventas")
 public class SalesController {
     private final Logger logger = LoggerFactory.getLogger(SalesController.class.getSimpleName());
 
@@ -23,7 +23,7 @@ public class SalesController {
         this.salesService = salesService;
     }
 
-    @GetMapping
+    @GetMapping("/ventas")
     public ResponseEntity<?> getSales(
             @RequestParam(required = false) Long sale_id) {
         Map<String, Object> response = new HashMap<>();
@@ -45,7 +45,7 @@ public class SalesController {
         }
     }
 
-    @PostMapping("/sell")
+    @PostMapping("/crear-venta")
     public ResponseEntity<Ventas> createSale(@RequestBody Ventas sale) {
         Ventas newSale = salesService.createSale(sale);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSale);

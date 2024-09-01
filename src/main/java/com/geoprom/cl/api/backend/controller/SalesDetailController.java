@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/sales-details")
+@RequestMapping("/api/detalle-venta")
 public class SalesDetailController {
     private final Logger logger = LoggerFactory.getLogger(SalesDetailController.class.getSimpleName());
 
@@ -28,7 +28,7 @@ public class SalesDetailController {
     }
 
 
-    @GetMapping("/sales")
+    @GetMapping("/detalle-venta")
     public ResponseEntity<?> getAllSalesDetails() {
         try {
             Map<String, Object> response = new HashMap<>();

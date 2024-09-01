@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/productos")
 public class ProductsController {
     private final Logger logger = LoggerFactory.getLogger(ProductsController.class.getSimpleName());
 
@@ -25,7 +25,7 @@ public class ProductsController {
         this.productsService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/productos")
     public ResponseEntity<?> getProducts(@RequestParam(required = false) Long product_id) {
         logger.info("consultando productos: " + product_id);
         Map<String, Object> response = new HashMap<>();
@@ -44,7 +44,7 @@ public class ProductsController {
         }
     }
 
-    @PostMapping("/crearProducto")
+    @PostMapping("/crear-producto")
     public ResponseEntity<ResponseDTO> createProduct(@RequestBody Productos product) {
         ResponseDTO response = new ResponseDTO();
         try {

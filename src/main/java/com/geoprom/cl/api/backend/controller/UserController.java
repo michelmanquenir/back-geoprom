@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/usuarios")
 public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class.getSimpleName());
 
@@ -24,7 +24,7 @@ public class UserController {
         this.usersService = usersService;
     }
 
-    @GetMapping
+    @GetMapping("/usuarios")
     public ResponseEntity<?> getUsers(@RequestParam(required = false) Long user_id) {
         Map<String, Object> response = new HashMap<>();
 
