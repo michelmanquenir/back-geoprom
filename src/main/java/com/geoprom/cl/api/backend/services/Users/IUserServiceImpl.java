@@ -42,10 +42,7 @@ public class IUserServiceImpl {
         }
     }
 
-    @Transactional
-    public Usuarios createUser(Usuarios user) {
-        return userRepository.save(user);
-    }
+
 
     @Transactional
     public void softDeleteUser(Long userId) {
@@ -93,6 +90,14 @@ public class IUserServiceImpl {
             response.put("validUser", true);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+    }
+
+    @Transactional
+    public Usuarios createUser(Usuarios user) {
+        String contrasenaEncrypt = encryptPassword(user.getContrasena());
+
+        user.setContrasena(contrasenaEncrypt);
+        return userRepository.save(user);
     }
 
     public String encryptPassword(String password){
