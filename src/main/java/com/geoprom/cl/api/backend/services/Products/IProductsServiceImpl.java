@@ -1,5 +1,8 @@
 package com.geoprom.cl.api.backend.services.Products;
+import com.geoprom.cl.api.backend.Repository.CategoriasRepository;
 import com.geoprom.cl.api.backend.Repository.ProductosRepository;
+import com.geoprom.cl.api.backend.models.Categorias;
+import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
 import com.geoprom.cl.api.backend.models.Productos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,15 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IProductsServiceImpl implements ProductsService {
     private final Logger logger = LoggerFactory.getLogger(IProductsServiceImpl.class.getSimpleName());
 
     private final ProductosRepository productosRepository;
+    private final CategoriasRepository categoriasRepository;
 
-    public IProductsServiceImpl(ProductosRepository productRepository) {
+    public IProductsServiceImpl(ProductosRepository productRepository,
+                                CategoriasRepository categoriasRepository) {
         this.productosRepository = productRepository;
+        this.categoriasRepository = categoriasRepository;
     }
 
     public List<Productos> getProducts(Long product_id) {
@@ -34,8 +41,22 @@ public class IProductsServiceImpl implements ProductsService {
     }
 
     @Transactional
-    public Productos createProduct(Productos product) {
-        return productosRepository.save(product);
+    public Productos createProduct(ProductoDTO productosDTO) {
+        Productos producto = new Productos();
+        producto.setNombre(productosDTO.getNombre());
+        producto.setRut_empresa(productosDTO.getRut_empresa());
+        producto.setSku(productosDTO.getSku());
+        producto.setPrecio_compra(productosDTO.getPrecio_compra());
+        producto.setPrecio_venta(productosDTO.getPrecio_venta());
+        producto.setStock(productosDTO.getStock());
+        producto.setUrlImg(productosDTO.getUrlImg());
+        producto.setEstado(productosDTO.getEstado());
+
+        // Buscar la categoría por ID y asignarla al producto
+        Optional<Categorias> categoria = categoriasRepository.findById(productosDTO.getId_categoria());
+        categoria.ifPresent(producto::setCategoria);
+
+        return productosRepository.save(producto);
     }
 
     @Transactional

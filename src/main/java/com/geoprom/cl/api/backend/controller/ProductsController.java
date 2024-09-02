@@ -1,6 +1,7 @@
 package com.geoprom.cl.api.backend.controller;
 
 import com.geoprom.cl.api.backend.helper.ProductHelper;
+import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
 import com.geoprom.cl.api.backend.models.Productos;
 import com.geoprom.cl.api.backend.models.Response.Productos.ResponseDTO;
 import com.geoprom.cl.api.backend.services.Products.ProductsService;
@@ -45,7 +46,7 @@ public class ProductsController {
     }
 
     @PostMapping("/crear-producto")
-    public ResponseEntity<ResponseDTO> createProduct(@RequestBody Productos product) {
+    public ResponseEntity<ResponseDTO> createProduct(@RequestBody ProductoDTO product) {
         ResponseDTO response = new ResponseDTO();
         try {
             Productos newProduct = productsService.createProduct(product);
