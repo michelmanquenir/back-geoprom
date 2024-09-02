@@ -1,5 +1,5 @@
 package com.geoprom.cl.api.backend.services.Products;
-import com.geoprom.cl.api.backend.Repository.ProductsRepository;
+import com.geoprom.cl.api.backend.Repository.ProductosRepository;
 import com.geoprom.cl.api.backend.models.Productos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,49 +13,49 @@ import java.util.List;
 public class IProductsServiceImpl implements ProductsService {
     private final Logger logger = LoggerFactory.getLogger(IProductsServiceImpl.class.getSimpleName());
 
-    private final ProductsRepository productsRepository;
+    private final ProductosRepository productosRepository;
 
-    public IProductsServiceImpl(ProductsRepository productRepository) {
-        this.productsRepository = productRepository;
+    public IProductsServiceImpl(ProductosRepository productRepository) {
+        this.productosRepository = productRepository;
     }
 
     public List<Productos> getProducts(Long product_id) {
         logger.info("product_id:" + product_id);
         if (product_id != null) {
-            Productos products = productsRepository.findById(product_id).orElse(null);
+            Productos products = productosRepository.findById(product_id).orElse(null);
             if (products != null) {
                 return Collections.singletonList(products);
             } else {
                 return Collections.emptyList();
             }
         } else {
-            return productsRepository.findAll();
+            return productosRepository.findAll();
         }
     }
 
     @Transactional
     public Productos createProduct(Productos product) {
-        return productsRepository.save(product);
+        return productosRepository.save(product);
     }
 
     @Transactional
     public void softDeleteProduct(Long product_id) {
-        productsRepository.softDelete(product_id);
+        productosRepository.softDelete(product_id);
     }
 
     @Transactional
     public void activateProduct(Long product_id) {
-        productsRepository.activateProduct(product_id);
+        productosRepository.activateProduct(product_id);
     }
 
     @Override
     public Productos save(Productos product) {
-        return productsRepository.save(product);
+        return productosRepository.save(product);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Productos findById(Long product_id) {
-        return productsRepository.findById(product_id).orElse(null);
+        return productosRepository.findById(product_id).orElse(null);
     }
 }

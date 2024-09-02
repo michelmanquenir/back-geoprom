@@ -1,7 +1,8 @@
 package com.geoprom.cl.api.backend.controller;
 
+import com.geoprom.cl.api.backend.models.DTOs.VentaRequestDTO;
 import com.geoprom.cl.api.backend.models.Ventas;
-import com.geoprom.cl.api.backend.services.Sales.SalesService;
+import com.geoprom.cl.api.backend.services.Ventas.VentasService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ventas")
-public class SalesController {
-    private final Logger logger = LoggerFactory.getLogger(SalesController.class.getSimpleName());
+public class VentasController {
+    private final Logger logger = LoggerFactory.getLogger(VentasController.class.getSimpleName());
 
-    private final SalesService salesService;
+    private final VentasService ventaService;
 
-    public SalesController(SalesService salesService){
-        this.salesService = salesService;
+    public VentasController(VentasService ventaService){
+        this.ventaService = ventaService;
     }
 
     @GetMapping("/ventas")
@@ -28,16 +29,16 @@ public class SalesController {
             @RequestParam(required = false) Long sale_id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Ventas> sales = salesService.getSales(sale_id);
+            List<Ventas> sales = ventaService.getSales(sale_id);
             if (sales == null){
                 logger.info("Sales does not exist in the database");
                 response.put("message", "Error: could not edit the sale with Id: "
                         .concat(sale_id.toString().concat(" does not exist in database")));
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            response.put("sales", sales);
+            response.put("ventas", sales);
             response.put("error", 0);
-            response.put("message", "Successfully achieved sales");
+            response.put("message", "Ventas encontradas con exito");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
             response.put("message", "error when searching sales");
@@ -46,8 +47,8 @@ public class SalesController {
     }
 
     @PostMapping("/crear-venta")
-    public ResponseEntity<Ventas> createSale(@RequestBody Ventas sale) {
-        Ventas newSale = salesService.createSale(sale);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newSale);
+    public ResponseEntity<Ventas> crearVenta(@RequestBody VentaRequestDTO ventaRequest) {
+        Ventas nuevaVenta = ventaService.crearVenta(ventaRequest);
+        return ResponseEntity.ok(nuevaVenta);
     }
 }

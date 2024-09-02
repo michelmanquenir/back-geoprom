@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UsersRepository extends JpaRepository<Usuarios, Long> {
+public interface UsuariosRepository extends JpaRepository<Usuarios, Long> {
 
     @Modifying
     @Query("UPDATE Usuarios u SET u.estado = 0 WHERE u.id = :id")

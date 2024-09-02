@@ -1,6 +1,6 @@
 package com.geoprom.cl.api.backend.services.SalesDetail;
 
-import com.geoprom.cl.api.backend.Repository.SalesDetailRepository;
+import com.geoprom.cl.api.backend.Repository.DetalleVentasRepository;
 import com.geoprom.cl.api.backend.models.DetalleVentas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +12,13 @@ import java.util.List;
 public class ISalesDetailServiceImpl implements SalesDetailService {
     private final Logger logger = LoggerFactory.getLogger(ISalesDetailServiceImpl.class.getSimpleName());
 
-    private final SalesDetailRepository salesDetailRepository;
+    private final DetalleVentasRepository detalleVentasRepository;
 
-    public ISalesDetailServiceImpl(SalesDetailRepository salesDetailRepository) {
-        this.salesDetailRepository = salesDetailRepository;
+    public ISalesDetailServiceImpl(DetalleVentasRepository detalleVentasRepository) {
+        this.detalleVentasRepository = detalleVentasRepository;
     }
 
     public List<DetalleVentas> getAllSalesDetails() {
-        return salesDetailRepository.findAll();
+        return detalleVentasRepository.findAll();
     }
 }

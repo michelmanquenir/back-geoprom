@@ -1,12 +1,14 @@
 package com.geoprom.cl.api.backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,4 +43,8 @@ public class Ventas {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp created_at;
+
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<DetalleVentas> detalleVentas;
 }

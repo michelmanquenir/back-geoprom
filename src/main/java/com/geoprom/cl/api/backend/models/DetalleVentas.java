@@ -1,5 +1,6 @@
 package com.geoprom.cl.api.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class DetalleVentas {
 
     @ManyToOne
     @JoinColumn(name = "id_venta", nullable = false)
+    @JsonBackReference
     private Ventas sale;
 
     @ManyToOne

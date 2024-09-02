@@ -39,7 +39,7 @@ public class ProductsController {
             response.put("message", "Productos obtenidos con exito");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
-            response.put("message", "error when searching users");
+            response.put("message", "Error en la busqueda de productos");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -50,7 +50,7 @@ public class ProductsController {
         try {
             Productos newProduct = productsService.createProduct(product);
             response.setError(0); // Sin errores
-            response.setMessage("Producto creado con éxito");
+            response.setMessage("Producto creado con exito");
             response.setProduct(newProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class ProductsController {
             Productos currentProduct = productsService.findById(product_id);
 
             if (currentProduct == null) {
-                logger.info("Product does not exist in the database");
+                logger.info("El producto no existe en la base de datos");
                 response.put("message", "Error: could not edit the product with Id: "
                         .concat(product_id.toString().concat(" does not exist in database")));
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -102,7 +102,7 @@ public class ProductsController {
             response.put("data", products);
             response.put("code", HttpStatus.OK.value());
             response.put("error", 0);
-            response.put("message", "Product successfully updated");
+            response.put("message", "Producto actualizado correctamente");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 

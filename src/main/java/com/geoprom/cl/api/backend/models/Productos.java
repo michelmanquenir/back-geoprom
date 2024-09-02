@@ -39,4 +39,8 @@ public class Productos {
 
     @Column(name = "estado")
     private Integer estado;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+    private Categorias categoria;
 }

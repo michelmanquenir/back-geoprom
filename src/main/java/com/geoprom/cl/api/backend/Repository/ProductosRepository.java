@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ProductsRepository extends JpaRepository<Productos, Long> {
+public interface ProductosRepository extends JpaRepository<Productos, Long> {
 
     @Modifying
     @Query("UPDATE Productos u SET u.estado = 0 WHERE u.id = :id")
