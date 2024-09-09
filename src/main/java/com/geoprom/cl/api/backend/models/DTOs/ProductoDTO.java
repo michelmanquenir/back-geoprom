@@ -1,11 +1,20 @@
 package com.geoprom.cl.api.backend.models.DTOs;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class ProductoDTO {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     private String nombre;
     private String rut_empresa;

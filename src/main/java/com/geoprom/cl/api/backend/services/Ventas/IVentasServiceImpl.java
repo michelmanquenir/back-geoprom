@@ -76,7 +76,7 @@ public class IVentasServiceImpl implements VentasService {
 
             DetalleVentas detalle = new DetalleVentas();
             detalle.setSale(venta);
-            detalle.setProduct(producto);
+            detalle.setProductos(producto);
             detalle.setCantidad(detalleDTO.getCantidad());
             detalle.setPrecio_unitario(detalleDTO.getPrecio_unitario());
             detalle.setSubtotal(detalleDTO.getSubtotal());
