@@ -1,9 +1,7 @@
 package com.geoprom.cl.api.backend.controller;
 
-import com.geoprom.cl.api.backend.Repository.CategoriasRepository;
 import com.geoprom.cl.api.backend.models.Categorias;
 import com.geoprom.cl.api.backend.services.Categorias.CategoriasService;
-import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

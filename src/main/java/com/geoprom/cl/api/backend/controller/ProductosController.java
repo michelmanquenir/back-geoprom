@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/productos")
-public class ProductsController {
-    private final Logger logger = LoggerFactory.getLogger(ProductsController.class.getSimpleName());
+@RequestMapping("/api")
+public class ProductosController {
+    private final Logger logger = LoggerFactory.getLogger(ProductosController.class.getSimpleName());
 
     private final ProductsService productsService;
 
-    public ProductsController(ProductsService productService) {
+    public ProductosController(ProductsService productService) {
         this.productsService = productService;
     }
 

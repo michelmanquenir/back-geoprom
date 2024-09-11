@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/usuarios")
-public class UserController {
-    private final Logger logger = LoggerFactory.getLogger(UserController.class.getSimpleName());
+@RequestMapping("/api")
+public class UsuariosController {
+    private final Logger logger = LoggerFactory.getLogger(UsuariosController.class.getSimpleName());
 
     private final IUserServiceImpl usersService;
 
-    public UserController(IUserServiceImpl usersService) {
+    public UsuariosController(IUserServiceImpl usersService) {
         this.usersService = usersService;
     }
 
@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> softDeleteUser(@PathVariable Long userId) {
         Map<String, Object> response = new HashMap<>();
         usersService.softDeleteUser(userId);
-        response.put("message", "Cpf has been successfully eliminated");
+        response.put("message", "Usuario eliminado con exito");
         response.put("code", HttpStatus.OK.value());
         response.put("error", 0);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -64,7 +64,6 @@ public class UserController {
     public ResponseEntity<?>loginUser(@RequestBody LoginRequest loginRequest) {
         logger.info("email: " + loginRequest.getEmail());
         logger.info("password: " + loginRequest.getPassword());
-
         try {
             return usersService.findUserByEmail(loginRequest);
         } catch (Exception e) {

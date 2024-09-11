@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/detalle-venta")
+@RequestMapping("/api")
 public class SalesDetailController {
     private final Logger logger = LoggerFactory.getLogger(SalesDetailController.class.getSimpleName());
 
