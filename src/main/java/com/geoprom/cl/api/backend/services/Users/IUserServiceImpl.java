@@ -7,6 +7,7 @@ import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class IUserServiceImpl {
+public class IUserServiceImpl implements UserService{
     private final Logger logger = LoggerFactory.getLogger(IUserServiceImpl.class.getSimpleName());
 
     public static UsuariosRepository userRepository;
@@ -126,4 +127,22 @@ public class IUserServiceImpl {
         return null; // En caso de error
     }
 
+    @Override
+    public Usuarios updatedUser(Long id, Usuarios userDetails) {
+        Usuarios user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setNombre(userDetails.getNombre());
+        user.setApellido(userDetails.getApellido());
+        user.setRut(userDetails.getRut());
+        user.setEmail(userDetails.getEmail());
+        user.setDireccion(userDetails.getDireccion());
+        user.setFecha_nac(userDetails.getFecha_nac());
+        user.setEstado(userDetails.getEstado());
+        user.setTelefono(userDetails.getTelefono());
+        user.setContrasena(userDetails.getContrasena());
+        user.setPerfil(userDetails.getPerfil());
+
+        return userRepository.save(user);
+    }
 }
