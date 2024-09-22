@@ -2,6 +2,7 @@ package com.geoprom.cl.api.backend.services.Products;
 
 import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
 import com.geoprom.cl.api.backend.models.Productos;
+import com.geoprom.cl.api.backend.models.Request.Productos.UpdateProductoRequest;
 
 import java.util.List;
 
@@ -17,6 +18,5 @@ public interface ProductsService {
 
     void activateProduct(Long product_id);
 
-    Productos save(Productos products);
-
+    void save(Productos product);  // Se cambia a Productos en lugar de ProductoDTO
 }

@@ -4,6 +4,7 @@ import com.geoprom.cl.api.backend.Repository.ProductosRepository;
 import com.geoprom.cl.api.backend.models.Categorias;
 import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
 import com.geoprom.cl.api.backend.models.Productos;
+import com.geoprom.cl.api.backend.models.Request.Productos.UpdateProductoRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -69,9 +70,9 @@ public class IProductsServiceImpl implements ProductsService {
         productosRepository.activateProduct(product_id);
     }
 
-    @Override
-    public Productos save(Productos product) {
-        return productosRepository.save(product);
+    @Transactional
+    public void save(Productos producto) {
+        productosRepository.save(producto); // Guarda el producto con el ID existente
     }
 
     @Override

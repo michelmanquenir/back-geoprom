@@ -1,55 +1,66 @@
 package com.geoprom.cl.api.backend.helper;
 
+import com.geoprom.cl.api.backend.Repository.CategoriasRepository;
+import com.geoprom.cl.api.backend.models.Categorias;
+import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
 import com.geoprom.cl.api.backend.models.Productos;
+import com.geoprom.cl.api.backend.models.Request.Productos.UpdateProductoRequest;
 import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class ProductHelper {
     private static final Logger logger = LoggerFactory.getLogger(ProductHelper.class.getSimpleName());
 
-    private static ProductsService productsService;
+    private final ProductsService productsService;
+    private final CategoriasRepository categoriasRepository;
 
-    public ProductHelper(ProductsService productsService) {
-        ProductHelper.productsService = productsService;
+    public ProductHelper(ProductsService productsService,
+                         CategoriasRepository categoriasRepository) {
+        this.productsService = productsService;
+        this.categoriasRepository = categoriasRepository;
     }
-    public static Productos updateProduct(Productos product, Productos currentProduct) {
+
+    public void updateProduct(UpdateProductoRequest product, Productos currentProduct) {
         logger.info("Start updateProduct");
 
-        Productos newProducts = new Productos();
-        BeanUtils.copyProperties(currentProduct, newProducts);
-
-        // Actualizar solo los campos no nulos de product
-        if (product.getId() != null) {
-            newProducts.setId(product.getId());
-        }
+        // Actualizar solo los campos no nulos de product en currentProduct
         if (product.getNombre() != null) {
-            newProducts.setNombre(product.getNombre());
+            currentProduct.setNombre(product.getNombre());
         }
         if (product.getRut_empresa() != null) {
-            newProducts.setRut_empresa(product.getRut_empresa());
+            currentProduct.setRut_empresa(product.getRut_empresa());
         }
         if (product.getSku() != null) {
-            newProducts.setSku(product.getSku());
+            currentProduct.setSku(product.getSku());
         }
         if (product.getPrecio_compra() != null) {
-            newProducts.setPrecio_compra(product.getPrecio_compra());
+            currentProduct.setPrecio_compra(product.getPrecio_compra());
         }
         if (product.getPrecio_venta() != null) {
-            newProducts.setPrecio_venta(product.getPrecio_venta());
+            currentProduct.setPrecio_venta(product.getPrecio_venta());
         }
         if (product.getStock() != null) {
-            newProducts.setStock(product.getStock());
+            currentProduct.setStock(product.getStock());
         }
         if (product.getUrlImg() != null) {
-            newProducts.setUrlImg(product.getUrlImg());
+            currentProduct.setUrlImg(product.getUrlImg());
         }
         if (product.getEstado() != null) {
-            newProducts.setEstado(product.getEstado());
+            currentProduct.setEstado(product.getEstado());
         }
-        return productsService.save(newProducts);
+        if (product.getId_categoria() != null) {
+            // Buscar la categoría por ID y asignarla al producto
+            Optional<Categorias> categoria = categoriasRepository.findById(product.getId_categoria());
+            categoria.ifPresent(currentProduct::setCategoria);
+        }
+
+        // Pasar el producto actualizado al servicio
+        productsService.save(currentProduct);
     }
 }
