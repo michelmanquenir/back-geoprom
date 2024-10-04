@@ -3,6 +3,7 @@ package com.geoprom.cl.api.backend.services.Users;
 
 import com.geoprom.cl.api.backend.Repository.UsuariosRepository;
 import com.geoprom.cl.api.backend.models.Request.LoginRequest;
+import com.geoprom.cl.api.backend.models.Request.Usuarios.UpdateUsuarioRequest;
 import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.utils.Utils;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class IUserServiceImpl {
+public class IUserServiceImpl implements UserService{
     private final Logger logger = LoggerFactory.getLogger(IUserServiceImpl.class.getSimpleName());
 
     public static UsuariosRepository userRepository;
@@ -122,8 +123,47 @@ public class IUserServiceImpl {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null; // En caso de error
+    }
+
+
+
+    @Transactional
+    public Usuarios findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+
+    @Transactional
+    public Usuarios updateUsuario(Long id, UpdateUsuarioRequest updateRequest) {
+        Usuarios existingUsuario = userRepository.findById(id).orElse(null);
+
+        // Actualizar los campos básicos
+        assert existingUsuario != null;
+        existingUsuario.setNombre(updateRequest.getNombre());
+        existingUsuario.setApellido(updateRequest.getApellido());
+        existingUsuario.setRut(updateRequest.getRut());
+        existingUsuario.setEmail(updateRequest.getEmail());
+        existingUsuario.setDireccion(updateRequest.getDireccion());
+        existingUsuario.setFecha_nac(updateRequest.getFecha_nac());
+        existingUsuario.setEstado(updateRequest.getEstado());
+        existingUsuario.setTelefono(updateRequest.getTelefono());
+        existingUsuario.setPerfil(updateRequest.getPerfil());
+
+        // Actualizar la contraseña si se proporciona una nueva
+        if (updateRequest.getContrasena() != null && !updateRequest.getContrasena().isEmpty()) {
+            existingUsuario.setContrasena(encryptPassword(updateRequest.getContrasena()));
+        }
+
+        // No se actualiza la imagen aquí; se maneja en el controlador
+
+        // Guardar los cambios
+        return userRepository.save(existingUsuario);
+    }
+
+    @Transactional
+    public void save(Usuarios usuarios) {
+        userRepository.save(usuarios); // Guarda el producto con el ID existente
     }
 
 }

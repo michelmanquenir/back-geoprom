@@ -18,5 +18,5 @@ public interface ProductsService {
 
     void activateProduct(Long product_id);
 
-    void save(Productos product);  // Se cambia a Productos en lugar de ProductoDTO
+    void save(Productos product);
 }

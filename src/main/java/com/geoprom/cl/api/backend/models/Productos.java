@@ -19,6 +19,9 @@ public class Productos {
     @Column(name = "nombre")
     private String nombre;
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
     @Column(name = "rut_empresa")
     private String rut_empresa;
 

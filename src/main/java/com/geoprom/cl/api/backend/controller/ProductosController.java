@@ -29,6 +29,7 @@ public class ProductosController {
 
     private final ProductsService productsService;
     private final ProductHelper productHelper;
+
     public ProductosController(ProductsService productService,
                                ProductHelper productHelper) {
         this.productsService = productService;
@@ -94,7 +95,7 @@ public class ProductosController {
         }
     }
 
-    @DeleteMapping("/{productId}/soft-delete")
+    @DeleteMapping("/productos/{productId}/soft-delete")
     public ResponseEntity<?> softDeleteProduct(@PathVariable Long productId) {
         Map<String, Object> response = new HashMap<>();
 
@@ -148,7 +149,17 @@ public class ProductosController {
                 // Guardar la nueva imagen
                 String newFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 Path newImagePath = Paths.get(uploadDir).resolve(newFileName).toAbsolutePath();
+
+                // Crear el directorio si no existe
+                Path uploadDirectory = newImagePath.getParent();
+                if (!Files.exists(uploadDirectory)) {
+                    Files.createDirectories(uploadDirectory);
+                    System.out.println("Directorio creado: " + uploadDirectory.toString());
+                }
+
+                System.out.println("Intentando copiar el archivo a: " + newImagePath.toString());
                 Files.copy(file.getInputStream(), newImagePath, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Archivo copiado exitosamente a: " + newImagePath.toString());
 
                 // Actualizar la URL de la imagen en el producto
                 updateProductoRequest.setUrlImg("/uploads/images/" + newFileName);

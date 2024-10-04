@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "usuarios")
+@Where(clause = "estado=1")
 public class Usuarios {
 
     @Id
@@ -49,4 +51,7 @@ public class Usuarios {
 
     @Column(name = "perfil")
     private Integer perfil;
+
+    @Column(name = "url_img")
+    private String urlImg;
 }
