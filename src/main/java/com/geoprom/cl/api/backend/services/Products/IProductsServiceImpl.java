@@ -82,44 +82,4 @@ public class IProductsServiceImpl implements ProductsService {
 }
 
 
-const BtnApprove = (i
-        businessId,
-isActive,
-approverUserId,
-onApprove,
-openPop,
-anchorEl,
-handlePopoverOpen,
-handlePopoverClose,
-popoverText,
-esUsuarioCreador
-aria-owns={openPop ? 'mouse-over-popover': undefined}
-aria-haspopup="true"
-onMouseEnter=(handlePopoverOpen}
-onMouseLeave=[handlePopoverClose}
 
-onClick={() => onApprove(businessId, isActive, approverUserId)}
-
-
-        import { green, grey } from "@mui/material/colors";
-        =>
-        return (
-< IconButton
-disabled=[esUsuarioCreador]
-< Popover
-id="mouse-over-popover"
-        5x={
-pointerEvents: 'none'
-        open={openPop}
-        anchorEl- (anchorEl} anchorOrigin=t
-        vertical: 'bottom' horizontal: 'left',
-        }}
-        transformOrigin=fl vertical: 'top', horizontal: 'left',
-        }}
-        onClose=(handlePopoverClose}
-        disableRestoreFocus
-        ‹Typography sx=ff p: 1 77>(popoverText)</Typography>
-        </Popover>
-        ‹DoneOutlineRoundedIcon sx=ff color: esUsuarioCreador ? grey[500] : green[500] 1}
-        </ IconButton>
-        export default BtnApprove;
