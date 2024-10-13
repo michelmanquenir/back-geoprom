@@ -34,6 +34,10 @@ public class Ventas {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuarios user;
 
+    @ManyToOne
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Clientes cliente;
+
     @Column(name = "estado", nullable = false)
     private Short estado;
 
