@@ -14,6 +14,7 @@ public class VentaRequestDTO {
     private BigDecimal total_venta;
     private Short metodo_pago;
     private Long id_usuario;  // ID del usuario que realiza la venta
+    private Long id_cliente;  // ID del cliente
     private Short estado;
     private List<DetalleVentaDTO> detalles;
 }

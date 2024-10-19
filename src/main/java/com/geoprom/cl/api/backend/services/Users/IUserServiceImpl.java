@@ -55,6 +55,9 @@ public class IUserServiceImpl implements UserService{
         userRepository.activateUser(userId);
     }
 
+
+
+
     public ResponseEntity<?> findUserByEmail(LoginRequest loginRequest){
         logger.info("findUserByEmail");
         Map<String, Object> response = new HashMap<>();

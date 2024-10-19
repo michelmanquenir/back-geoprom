@@ -1,15 +1,9 @@
 package com.geoprom.cl.api.backend.services.Ventas;
 
-import com.geoprom.cl.api.backend.Repository.DetalleVentasRepository;
-import com.geoprom.cl.api.backend.Repository.ProductosRepository;
-import com.geoprom.cl.api.backend.Repository.UsuariosRepository;
-import com.geoprom.cl.api.backend.Repository.VentasRepository;
+import com.geoprom.cl.api.backend.Repository.*;
+import com.geoprom.cl.api.backend.models.*;
 import com.geoprom.cl.api.backend.models.DTOs.DetalleVentaDTO;
 import com.geoprom.cl.api.backend.models.DTOs.VentaRequestDTO;
-import com.geoprom.cl.api.backend.models.DetalleVentas;
-import com.geoprom.cl.api.backend.models.Productos;
-import com.geoprom.cl.api.backend.models.Usuarios;
-import com.geoprom.cl.api.backend.models.Ventas;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +21,18 @@ public class IVentasServiceImpl implements VentasService {
     private final DetalleVentasRepository detalleVentasRepository;
     private final UsuariosRepository usuariosRepository;
     private final ProductosRepository productosRepository;
+    private final ClientesRepository clientesRepository;
 
     public IVentasServiceImpl(VentasRepository ventasRepository,
                               DetalleVentasRepository detalleVentasRepository,
                               UsuariosRepository usuariosRepository,
-                              ProductosRepository productosRepository) {
+                              ProductosRepository productosRepository,
+                              ClientesRepository clientesRepository) {
         this.ventasRepository = ventasRepository;
         this.detalleVentasRepository = detalleVentasRepository;
         this.usuariosRepository = usuariosRepository;
         this.productosRepository = productosRepository;
+        this.clientesRepository = clientesRepository;
     }
 
     @Override
@@ -59,12 +56,16 @@ public class IVentasServiceImpl implements VentasService {
         Usuarios usuario = usuariosRepository.findById(ventaRequest.getId_usuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        Clientes cliente = clientesRepository.findById(ventaRequest.getId_cliente())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
         // Crear la entidad Ventas
         Ventas venta = new Ventas();
         venta.setTotal_ganancia(ventaRequest.getTotal_ganancia());
         venta.setTotal_venta(ventaRequest.getTotal_venta());
         venta.setMetodo_pago(ventaRequest.getMetodo_pago());
         venta.setUser(usuario);
+        venta.setCliente(cliente);
         venta.setEstado(ventaRequest.getEstado());
         venta.setCreated_at(new Timestamp(System.currentTimeMillis()));
         ventasRepository.save(venta);

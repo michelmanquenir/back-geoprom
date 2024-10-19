@@ -6,14 +6,10 @@ import com.geoprom.cl.api.backend.models.Request.Usuarios.UpdateUsuarioRequest;
 import com.geoprom.cl.api.backend.models.Response.Usuarios.ResponseCreateUsuarioDTO;
 import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.services.Users.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -117,13 +113,17 @@ public class UsuariosController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?>loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         logger.info("email: " + loginRequest.getEmail());
         logger.info("password: " + loginRequest.getPassword());
         try {
             return usersService.findUserByEmail(loginRequest);
         } catch (Exception e) {
-            return null;
+            // Manejo de excepciones más adecuado
+            logger.error("Error durante el inicio de sesión", e);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Error interno del servidor");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -205,3 +205,5 @@ public class UsuariosController {
         }
     }
 }
+
+
