@@ -56,10 +56,11 @@ public class IVentasServiceImpl implements VentasService {
         Usuarios usuario = usuariosRepository.findById(ventaRequest.getId_usuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // Obtener el cliente
         Clientes cliente = clientesRepository.findById(ventaRequest.getId_cliente())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-        // Crear la entidad Ventas
+        // Crear la entidad Ventas utilizando total_ganancia proporcionado desde el frontend
         Ventas venta = new Ventas();
         venta.setTotal_ganancia(ventaRequest.getTotal_ganancia());
         venta.setTotal_venta(ventaRequest.getTotal_venta());
@@ -75,6 +76,13 @@ public class IVentasServiceImpl implements VentasService {
             Productos producto = productosRepository.findById(detalleDTO.getId_producto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
+            // Actualizar el stock del producto
+            if (producto.getStock() < detalleDTO.getCantidad()) {
+                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
+            }
+            producto.setStock(producto.getStock() - detalleDTO.getCantidad());
+            productosRepository.save(producto);
+
             DetalleVentas detalle = new DetalleVentas();
             detalle.setSale(venta);
             detalle.setProductos(producto);
@@ -87,4 +95,5 @@ public class IVentasServiceImpl implements VentasService {
 
         return venta;
     }
+
 }

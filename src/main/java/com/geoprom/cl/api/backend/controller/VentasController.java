@@ -47,8 +47,14 @@ public class VentasController {
     }
 
     @PostMapping("/crear-venta")
-    public ResponseEntity<Ventas> crearVenta(@RequestBody VentaRequestDTO ventaRequest) {
-        Ventas nuevaVenta = ventaService.crearVenta(ventaRequest);
-        return ResponseEntity.ok(nuevaVenta);
+    public ResponseEntity<?> crearVenta(@RequestBody VentaRequestDTO ventaRequest) {
+        try {
+            Ventas nuevaVenta = ventaService.crearVenta(ventaRequest);
+            return ResponseEntity.ok(nuevaVenta);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+        }
     }
 }

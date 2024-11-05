@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -29,10 +31,10 @@ public class Productos {
     private String sku;
 
     @Column(name = "precio_compra")
-    private Integer precio_compra;
+    private BigDecimal precio_compra;
 
     @Column(name = "precio_venta")
-    private Integer precio_venta;
+    private BigDecimal precio_venta;
 
     @Column(name = "stock")
     private Integer stock;
