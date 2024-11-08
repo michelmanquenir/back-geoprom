@@ -1,55 +1,66 @@
 package com.geoprom.cl.api.backend.helper;
 
-import com.geoprom.cl.api.backend.models.Products;
-import com.geoprom.cl.api.backend.services.Products.ProductService;
+import com.geoprom.cl.api.backend.Repository.CategoriasRepository;
+import com.geoprom.cl.api.backend.models.Categorias;
+import com.geoprom.cl.api.backend.models.DTOs.ProductoDTO;
+import com.geoprom.cl.api.backend.models.Productos;
+import com.geoprom.cl.api.backend.models.Request.Productos.UpdateProductoRequest;
+import com.geoprom.cl.api.backend.services.Products.ProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class ProductHelper {
     private static final Logger logger = LoggerFactory.getLogger(ProductHelper.class.getSimpleName());
 
-    private static ProductService productService;
+    private final ProductsService productsService;
+    private final CategoriasRepository categoriasRepository;
 
-    public ProductHelper(ProductService productService) {
-        ProductHelper.productService = productService;
+    public ProductHelper(ProductsService productsService,
+                         CategoriasRepository categoriasRepository) {
+        this.productsService = productsService;
+        this.categoriasRepository = categoriasRepository;
     }
-    public static Products updateProduct(Products product, Products currentProduct) {
+
+    public void updateProduct(UpdateProductoRequest product, Productos currentProduct) {
         logger.info("Start updateProduct");
 
-        Products newProducts = new Products();
-        BeanUtils.copyProperties(currentProduct, newProducts);
-
-        // Actualizar solo los campos no nulos de product
-        if (product.getId() != null) {
-            newProducts.setId(product.getId());
+        // Actualizar solo los campos no nulos de product en currentProduct
+        if (product.getNombre() != null) {
+            currentProduct.setNombre(product.getNombre());
         }
-        if (product.getName() != null) {
-            newProducts.setName(product.getName());
-        }
-        if (product.getRutCompany() != null) {
-            newProducts.setRutCompany(product.getRutCompany());
+        if (product.getRut_empresa() != null) {
+            currentProduct.setRut_empresa(product.getRut_empresa());
         }
         if (product.getSku() != null) {
-            newProducts.setSku(product.getSku());
+            currentProduct.setSku(product.getSku());
         }
-        if (product.getPurchasePrice() != null) {
-            newProducts.setPurchasePrice(product.getPurchasePrice());
+        if (product.getPrecio_compra() != null) {
+            currentProduct.setPrecio_compra(product.getPrecio_compra());
         }
-        if (product.getPurchaseSell() != null) {
-            newProducts.setPurchaseSell(product.getPurchaseSell());
+        if (product.getPrecio_venta() != null) {
+            currentProduct.setPrecio_venta(product.getPrecio_venta());
         }
         if (product.getStock() != null) {
-            newProducts.setStock(product.getStock());
+            currentProduct.setStock(product.getStock());
         }
         if (product.getUrlImg() != null) {
-            newProducts.setUrlImg(product.getUrlImg());
+            currentProduct.setUrlImg(product.getUrlImg());
         }
-        if (product.getStatus() != null) {
-            newProducts.setStatus(product.getStatus());
+        if (product.getEstado() != null) {
+            currentProduct.setEstado(product.getEstado());
         }
-        return productService.save(newProducts);
+        if (product.getId_categoria() != null) {
+            // Buscar la categoría por ID y asignarla al producto
+            Optional<Categorias> categoria = categoriasRepository.findById(product.getId_categoria());
+            categoria.ifPresent(currentProduct::setCategoria);
+        }
+
+        // Pasar el producto actualizado al servicio
+        productsService.save(currentProduct);
     }
 }

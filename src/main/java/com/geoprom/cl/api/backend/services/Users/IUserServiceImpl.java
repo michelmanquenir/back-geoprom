@@ -1,9 +1,10 @@
 package com.geoprom.cl.api.backend.services.Users;
 
 
-import com.geoprom.cl.api.backend.Repository.UserRepository;
+import com.geoprom.cl.api.backend.Repository.UsuariosRepository;
 import com.geoprom.cl.api.backend.models.Request.LoginRequest;
-import com.geoprom.cl.api.backend.models.Users;
+import com.geoprom.cl.api.backend.models.Request.Usuarios.UpdateUsuarioRequest;
+import com.geoprom.cl.api.backend.models.Usuarios;
 import com.geoprom.cl.api.backend.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,18 +21,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class IUserServiceImpl {
+public class IUserServiceImpl implements UserService{
     private final Logger logger = LoggerFactory.getLogger(IUserServiceImpl.class.getSimpleName());
 
-    public static UserRepository userRepository;
+    public static UsuariosRepository userRepository;
 
-    public IUserServiceImpl(UserRepository userRepository) {
+    public IUserServiceImpl(UsuariosRepository userRepository) {
         IUserServiceImpl.userRepository = userRepository;
     }
 
-    public List<Users> getUsers(Long userId) {
+    public List<Usuarios> getUsers(Long userId) {
         if (userId != null) {
-            Users user = userRepository.findById(userId).orElse(null);
+            Usuarios user = userRepository.findById(userId).orElse(null);
             if (user != null) {
                 return Collections.singletonList(user);
             } else {
@@ -42,10 +43,7 @@ public class IUserServiceImpl {
         }
     }
 
-    @Transactional
-    public Users createUser(Users user) {
-        return userRepository.save(user);
-    }
+
 
     @Transactional
     public void softDeleteUser(Long userId) {
@@ -57,32 +55,35 @@ public class IUserServiceImpl {
         userRepository.activateUser(userId);
     }
 
+
+
+
     public ResponseEntity<?> findUserByEmail(LoginRequest loginRequest){
         logger.info("findUserByEmail");
         Map<String, Object> response = new HashMap<>();
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
-        Users user =  userRepository.findUserByEmail(email);
+        Usuarios user =  userRepository.findUserByEmail(email);
 
         if(user == null){
             logger.info("User not found for this email");
             response.put("message", "User not found for this email");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } else {
-            if(user.getStatus() == 0){
+            if(user.getEstado() == 0){
                 logger.info("User inactive");
                 response.put("message", "User inactive");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
             String passwordEncrypt = encryptPassword(password);
-            if(!passwordEncrypt.equals(user.getPassword())){
+            if(!passwordEncrypt.equals(user.getContrasena())){
                 logger.info("Incorrect password");
                 response.put("message", "Incorrect password");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            String usuario = user.getName();
+            String usuario = user.getNombre();
             logger.info("User correct");
             String token = Utils.createToken(usuario);
 
@@ -93,6 +94,14 @@ public class IUserServiceImpl {
             response.put("validUser", true);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+    }
+
+    @Transactional
+    public Usuarios createUser(Usuarios user) {
+        String contrasenaEncrypt = encryptPassword(user.getContrasena());
+
+        user.setContrasena(contrasenaEncrypt);
+        return userRepository.save(user);
     }
 
     public String encryptPassword(String password){
@@ -117,8 +126,47 @@ public class IUserServiceImpl {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null; // En caso de error
+    }
+
+
+
+    @Transactional
+    public Usuarios findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+
+    @Transactional
+    public Usuarios updateUsuario(Long id, UpdateUsuarioRequest updateRequest) {
+        Usuarios existingUsuario = userRepository.findById(id).orElse(null);
+
+        // Actualizar los campos básicos
+        assert existingUsuario != null;
+        existingUsuario.setNombre(updateRequest.getNombre());
+        existingUsuario.setApellido(updateRequest.getApellido());
+        existingUsuario.setRut(updateRequest.getRut());
+        existingUsuario.setEmail(updateRequest.getEmail());
+        existingUsuario.setDireccion(updateRequest.getDireccion());
+        existingUsuario.setFecha_nac(updateRequest.getFecha_nac());
+        existingUsuario.setEstado(updateRequest.getEstado());
+        existingUsuario.setTelefono(updateRequest.getTelefono());
+        existingUsuario.setPerfil(updateRequest.getPerfil());
+
+        // Actualizar la contraseña si se proporciona una nueva
+        if (updateRequest.getContrasena() != null && !updateRequest.getContrasena().isEmpty()) {
+            existingUsuario.setContrasena(encryptPassword(updateRequest.getContrasena()));
+        }
+
+        // No se actualiza la imagen aquí; se maneja en el controlador
+
+        // Guardar los cambios
+        return userRepository.save(existingUsuario);
+    }
+
+    @Transactional
+    public void save(Usuarios usuarios) {
+        userRepository.save(usuarios); // Guarda el producto con el ID existente
     }
 
 }
