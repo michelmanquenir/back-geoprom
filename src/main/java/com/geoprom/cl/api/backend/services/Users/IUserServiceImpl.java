@@ -43,8 +43,6 @@ public class IUserServiceImpl implements UserService{
         }
     }
 
-
-
     @Transactional
     public void softDeleteUser(Long userId) {
         userRepository.softDelete(userId);
@@ -54,9 +52,6 @@ public class IUserServiceImpl implements UserService{
     public void activateUser(Long userId) {
         userRepository.activateUser(userId);
     }
-
-
-
 
     public ResponseEntity<?> findUserByEmail(LoginRequest loginRequest){
         logger.info("findUserByEmail");
@@ -104,38 +99,10 @@ public class IUserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
-    public String encryptPassword(String password){
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-
-            byte[] inputBytes = password.getBytes("UTF-8");
-
-            byte[] hashBytes = messageDigest.digest(inputBytes);
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte hashByte : hashBytes) {
-                String hex = Integer.toHexString(0xff & hashByte);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null; // En caso de error
-    }
-
-
-
     @Transactional
     public Usuarios findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
-
 
     @Transactional
     public Usuarios updateUsuario(Long id, UpdateUsuarioRequest updateRequest) {
@@ -166,7 +133,32 @@ public class IUserServiceImpl implements UserService{
 
     @Transactional
     public void save(Usuarios usuarios) {
-        userRepository.save(usuarios); // Guarda el producto con el ID existente
+        userRepository.save(usuarios);
+    }
+
+    public static String encryptPassword(String password){
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+
+            byte[] inputBytes = password.getBytes("UTF-8");
+
+            byte[] hashBytes = messageDigest.digest(inputBytes);
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // En caso de error
     }
 
 }
